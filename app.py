@@ -9,17 +9,27 @@ st.set_page_config(page_title= "DashMulti", page_icon=":shark:", layout="wide")
 data = ut.loaddata('data.csv')
 faturamento_dia = ut.fatudia(data)
 
-
-line_chart = alt.Chart(data).mark_line(point=True).encode(
-    x=alt.X('DATA:T', title='Dia', axis=alt.Axis(format='%d/%m')), 
-    y=alt.Y('FATURADO', title='Faturamento (R$)', scale=alt.Scale(domain=[0, max(data['FATURADO']) * 1.3])),  
-    tooltip=['DATA:T', 'DIA', 'FATURADO']  
-).properties(
-    title='Evolução Diária do Faturamento'  
+graph = alt.Chart(data).mark_area(line={'color' : 'white'},
+    point={'color' : 'darkblue'},
+    color=alt.Gradient(
+        gradient='linear',
+        stops=[alt.GradientStop(color='black', offset=0),
+               alt.GradientStop(color='darkblue', offset=1)],
+        x1=1,
+        x2=1,
+        y1=1,
+        y2=0
+    )
+).encode(
+    x=alt.X('DATA:T', title='Meses',
+            axis=alt.Axis(format='%m/%Y', labelAngle=0, labelOverlap=True, tickCount='month')), 
+    y=alt.Y('FATURADO', title='Quantidade Vendida', scale=alt.Scale(domain=[0, max(data['FATURADO']) * 1.3])),
+    tooltip=['DIA', 'FATURADO']
 )
 
+
 st.title('Análise do Faturamento')
-st.altair_chart(line_chart, use_container_width=True)
+st.altair_chart(graph, use_container_width=True)
 
 st.divider()
 
