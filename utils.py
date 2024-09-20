@@ -24,4 +24,7 @@ def fatudia(data):
                                             ordered=True)
 
     faturamento_dia = faturamento_dia.sort_values(by= 'DIA')
+    x = faturamento_dia.loc[(faturamento_dia['DIA'] == 'SÁBADO') | (faturamento_dia['DIA'] == 'SEGUNDA-FEIRA')]['FATURADO'].sum()
+    faturamento_dia.loc[faturamento_dia['DIA'] == 'SEGUNDA-FEIRA', 'FATURADO'] = x
+    faturamento_dia.drop( index = faturamento_dia.loc[faturamento_dia['DIA'] == 'SÁBADO'].index, inplace = True)
     return faturamento_dia

@@ -22,7 +22,7 @@ graph = alt.Chart(data).mark_area(line={'color' : 'white'},
     )
 ).encode(
     x=alt.X('DATA:T', title='Meses',
-            axis=alt.Axis(format='%m/%Y', labelAngle=0, labelOverlap=True, tickCount='month')), 
+            axis=alt.Axis(format='%d', labelAngle=0, labelOverlap=True, tickCount='day')), 
     y=alt.Y('FATURADO', title='Quantidade Vendida', scale=alt.Scale(domain=[0, max(data['FATURADO']) * 1.3])),
     tooltip=['DIA', 'FATURADO']
 )
@@ -36,7 +36,7 @@ st.divider()
 
 st.title("Métricas Diárias")
 
-um, dois = st.columns ([1,8])
+um, dois = st.columns ([1,5])
 
 with um:
     d = st.date_input("Selecione uma data:", format= 'DD/MM/YYYY', 
@@ -72,7 +72,17 @@ st.divider()
 
 st.title('Análise do Faturamento por Dia da Semana')
 
-bar_chart = alt.Chart(faturamento_dia).mark_bar().encode(
+bar_chart = alt.Chart(faturamento_dia).mark_bar(
+    color = alt.Gradient(
+        gradient='linear',
+        stops=[alt.GradientStop(color='black', offset=0),
+               alt.GradientStop(color='darkblue', offset=1)],
+        x1=1,
+        x2=1,
+        y1=1,
+        y2=0
+    )
+).encode(
     x=alt.X('DIA', title='Dia da Semana', axis=alt.Axis(labelAngle=0)),
     y=alt.Y('FATURADO', title='Faturamento (R$)', 
             scale=alt.Scale(domain=[0, max(faturamento_dia['FATURADO']) * 1.3]))
@@ -81,3 +91,8 @@ bar_chart = alt.Chart(faturamento_dia).mark_bar().encode(
 )
 
 st.altair_chart(bar_chart, use_container_width=True)
+
+
+
+
+
